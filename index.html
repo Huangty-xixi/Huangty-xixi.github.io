@@ -109,6 +109,11 @@
     content:''; flex:1; height:1px;
     background: linear-gradient(90deg, rgba(88,166,255,0.25), transparent);
   }
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
   .video-card {
     position: relative;
     background: var(--surface);
@@ -191,6 +196,7 @@
     .hero { margin-bottom: 40px; }
     .tag { font-size: 12px; padding: 5px 14px; }
     .btn { padding: 10px 22px; font-size: 13px; }
+    .video-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -214,9 +220,41 @@
 
   <div class="section reveal">
     <div class="section-label"><span>实车演示</span></div>
-    <div class="video-card">
-      <div class="video-wrap">
-        <iframe src="https://player.bilibili.com/player.html?isOutside=true&aid=116944946596839&bvid=BV14LKB6MEDC&cid=40092043466&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+    <div class="video-grid">
+      <div class="video-card">
+        <div class="video-wrap">
+          <iframe src="https://player.bilibili.com/player.html?bvid=BV14LKB6MEDC&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-wrap">
+          <iframe src="https://player.bilibili.com/player.html?bvid=BV1ZGKq6nEr8&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-wrap">
+          <iframe src="https://player.bilibili.com/player.html?bvid=BV17GKq6HEqy&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-wrap">
+          <iframe src="https://player.bilibili.com/player.html?bvid=BV1ubKq66E2u&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-wrap">
+          <iframe src="https://player.bilibili.com/player.html?bvid=BV1gbKq66E71&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-wrap">
+          <iframe src="https://player.bilibili.com/player.html?bvid=BV1SbKq6zEeU&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-wrap">
+          <iframe src="https://player.bilibili.com/player.html?bvid=BV1SbKq6zE6S&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
+        </div>
       </div>
     </div>
   </div>
