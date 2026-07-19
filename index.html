@@ -68,6 +68,13 @@
     50% { background-position: 100% 50%; }
   }
 
+  /* ── 头像 ── */
+  .avatar {
+    font-size: 56px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.7s cubic-bezier(0.22,0.61,0.36,1) both;
+  }
+
   /* ── 标签 ── */
   .tags {
     margin-top: 28px;
@@ -264,6 +271,7 @@
 <div class="page">
 
   <div class="hero reveal">
+    <div class="avatar">🤖</div>
     <h1>26年RC</h1>
     <div class="tags">
       <span class="tag reveal">STM32H723</span>
@@ -314,12 +322,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="actions reveal">
-    <a href="https://github.com/Huangty-xixi/R2" target="_blank" class="btn">
-      查看项目源码 <span class="arrow">→</span>
-    </a>
   </div>
 
   <div class="social reveal">
