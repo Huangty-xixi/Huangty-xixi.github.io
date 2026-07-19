@@ -137,7 +137,18 @@
     border: none;
   }
 
-  /* ── 按钮 ── */
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+  .chart-card img {
+    display: block;
+    width: 100%;
+    border-radius: 8px;
+  }
   .actions {
     text-align: center;
     margin-top: 48px;
@@ -215,6 +226,13 @@
       <span class="tag reveal">多级 PID</span>
       <span class="tag reveal">C · 裸机</span>
       <span class="tag reveal">Git</span>
+    </div>
+  </div>
+
+  <div class="section reveal">
+    <div class="section-label"><span>提交记录</span></div>
+    <div class="chart-card">
+      <img src="https://ghchart.rshah.org/Huangty-xixi" alt="GitHub commits" loading="lazy">
     </div>
   </div>
 
