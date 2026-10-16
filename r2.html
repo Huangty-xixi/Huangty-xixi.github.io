@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ROBOCON 2026 主赛 R2 项目详情：STM32H723、FreeRTOS 任务结构、底盘与机构控制、分区流程及源码导览。">
+  <meta name="theme-color" content="#0a0c10">
+  <title>主赛 R2 · Huangty-xixi 作品集</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⚙%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="page">
+    <header class="site-header"><a class="brand" href="./"><span class="brand-mark" aria-hidden="true">H.</span> Huangty-xixi</a><nav aria-label="项目导航"><a href="index.html#projects">作品集</a><a href="#architecture">程序结构</a><a href="#modules">控制模块</a><a href="index.html#videos">实车演示</a></nav></header>
+    <main id="main">
+      <a class="breadcrumb" href="index.html#projects">← 返回作品集</a>
+      <section class="detail-hero" aria-labelledby="project-title">
+        <div class="project-meta"><span class="project-badge">主赛项目</span><span>ROBOCON 2026 / PROJECT 01</span></div>
+        <h1 id="project-title">主赛 R2</h1>
+        <p class="lead">把通信、运动控制与机构动作，组织成一套能在赛场运行的机器人程序。</p>
+        <div class="tags"><span class="tag">STM32H723</span><span class="tag">FreeRTOS</span><span class="tag">CAN / FDCAN</span><span class="tag">PID</span><span class="tag">C</span></div>
+        <div class="actions"><a class="btn btn-primary" href="https://github.com/Huangty-xixi/R2" target="_blank" rel="noopener noreferrer">查看 GitHub 仓库 <span aria-hidden="true">↗</span></a><a class="btn" href="index.html#videos">观看实车演示 <span aria-hidden="true">→</span></a></div>
+        <dl class="detail-stats"><div><dt>项目方向</dt><dd>主赛机器人控制</dd></div><div><dt>下位机平台</dt><dd>STM32H723 · FreeRTOS</dd></div><div><dt>应用流程</dt><dd>一区 · 二区 · 三区</dd></div></dl>
+      </section>
+      <section class="section" id="architecture" aria-labelledby="architecture-title">
+        <div class="section-label"><h2 id="architecture-title">程序结构</h2><span>01 / ARCHITECTURE</span></div>
+        <p class="section-intro">下位机把通信、运动和传感器采集分成独立任务。以下是按仓库代码整理的模块关系。</p>
+        <figure class="diagram">
+          <div class="diagram-label">STM32H723 / FreeRTOS</div>
+          <div class="diagram-row"><div class="diagram-node"><strong>CanTask</strong><small>CAN 通信任务</small></div><div class="diagram-node"><strong>MotionTask</strong><small>控制模式与分区流程</small></div><div class="diagram-node"><strong>SensorTask</strong><small>传感器数据任务</small></div></div>
+          <div class="diagram-arrow" aria-hidden="true">↓</div>
+          <div class="diagram-row"><div class="diagram-node"><strong>底盘与航向控制</strong><small>chassis / yaw_heading_ctrl</small></div><div class="diagram-node"><strong>机构动作流程</strong><small>Process_Flow / lift / kfs</small></div><div class="diagram-node"><strong>分区应用</strong><small>app_zone1 / 2 / 3</small></div></div>
+          <div class="diagram-arrow" aria-hidden="true">↓</div>
+          <div class="diagram-output">电机与机构执行 · 传感器反馈 · 实车联调</div>
+          <figcaption>模块概览，不代表各任务的严格调用顺序。任务创建见 <a href="https://github.com/Huangty-xixi/R2/blob/main/RC26_H7_R2/RC26_H7_R2/Core/Src/freertos.c" target="_blank" rel="noopener noreferrer">freertos.c</a>。</figcaption>
+        </figure>
+      </section>
+      <section class="section" id="modules" aria-labelledby="modules-title">
+        <div class="section-label"><h2 id="modules-title">控制模块</h2><span>02 / INSIDE R2</span></div>
+        <ol class="module-list">
+          <li><span class="module-no" aria-hidden="true">01</span><h3>控制模式与任务组织</h3><div><p>通过 FreeRTOS 组织通信、运动和传感器任务；运动任务处理遥控、自动模式及分区流程切换，把不同运行状态集中管理。</p><a href="https://github.com/Huangty-xixi/R2/blob/main/RC26_H7_R2/RC26_H7_R2/user/src/Motion_Task.c" target="_blank" rel="noopener noreferrer">查看 <code>Motion_Task.c</code> ↗</a></div></li>
+          <li><span class="module-no" aria-hidden="true">02</span><h3>底盘与闭环控制</h3><div><p>底盘运动、速度 PID、航向保持和锁定保持分别拆分为模块，便于单独查看控制逻辑与调试入口。</p><a href="https://github.com/Huangty-xixi/R2/tree/main/RC26_H7_R2/RC26_H7_R2/user/src" target="_blank" rel="noopener noreferrer">查看底盘控制模块 ↗</a></div></li>
+          <li><span class="module-no" aria-hidden="true">03</span><h3>机构与动作流程</h3><div><p>上台阶、下台阶、取放 KFS 和上坡等动作使用分步流程组织。代码包含阶段等待、超时处理和底盘控制覆盖，用于协调机构与运动。</p><a href="https://github.com/Huangty-xixi/R2/blob/main/RC26_H7_R2/RC26_H7_R2/user/src/Process_Flow.c" target="_blank" rel="noopener noreferrer">查看 <code>Process_Flow.c</code> ↗</a></div></li>
+          <li><span class="module-no" aria-hidden="true">04</span><h3>分区与整车联调</h3><div><p>一区、二区、三区流程分别组织，并有 R1 / R2 通信与上位机协议相关模块。结合首页分区视频，可以从源码与实车两个角度了解项目。</p><a href="https://github.com/Huangty-xixi/R2/blob/main/RC26_H7_R2/RC26_H7_R2/user/src/app_zone2.c" target="_blank" rel="noopener noreferrer">以二区流程为例 ↗</a></div></li>
+        </ol>
+      </section>
+      <section class="section" id="source" aria-labelledby="source-title">
+        <div class="section-label"><h2 id="source-title">源码导览</h2><span>03 / SOURCE MAP</span></div>
+        <div class="source-grid"><article class="source-card"><h3>RC26_H7_R2</h3><p>STM32 下位机工程：外设初始化、FreeRTOS 配置、底盘控制、机构与分区应用代码。</p><a class="text-link" href="https://github.com/Huangty-xixi/R2/tree/main/RC26_H7_R2/RC26_H7_R2" target="_blank" rel="noopener noreferrer">浏览下位机工程 ↗</a></article><article class="source-card"><h3>UPPC</h3><p>仓库中的上位机相关目录，包含导航、重定位与 RC2026 场地仿真等工程文件。</p><a class="text-link" href="https://github.com/Huangty-xixi/R2/tree/main/UPPC" target="_blank" rel="noopener noreferrer">浏览上位机目录 ↗</a></article></div>
+        <div class="actions detail-closing"><a class="btn btn-primary" href="index.html#videos">接下来，看实车表现 <span aria-hidden="true">→</span></a><a class="text-link" href="mailto:1815565869@qq.com">交流项目 ↗</a></div>
+      </section>
+    </main>
+    <footer class="contact"><p class="footer-note"><a href="./">Huangty-xixi</a> · 主赛 R2 / ROBOCON 2026</p></footer>
+  </div>
+  <a class="top-btn" href="#main" aria-label="回到顶部" hidden>↑</a>
+</body>
+</html>

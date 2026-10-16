@@ -1,420 +1,99 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>26年RC</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙</text></svg>">
-<style>
-  :root {
-    --bg: #0a0c10;
-    --surface: #111418;
-    --text: #c0c5ce;
-    --heading: #e8eaed;
-    --accent: #58a6ff;
-    --accent2: #79c0ff;
-    --glow: rgba(88,166,255,0.15);
-    --border: rgba(255,255,255,0.06);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior:smooth; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
-    font-size: 16px;
-    line-height: 1.7;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ── 网格背景 ── */
-  .bg-grid {
-    position: fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;
-    background-image:
-      linear-gradient(rgba(88,166,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(88,166,255,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
-  .bg-grid::after {
-    content:''; position:absolute; top:0; left:0; width:100%; height:100%;
-    background: radial-gradient(ellipse 60% 50% at 50% 40%, transparent 40%, var(--bg) 100%);
-  }
-
-  /* ── 容器 ── */
-  .page {
-    position: relative; z-index:1;
-    max-width: 900px; margin:0 auto; padding: 100px 28px 80px;
-  }
-
-  /* ── 标题区 ── */
-  .hero {
-    text-align: center;
-    margin-bottom: 64px;
-  }
-  .hero h1 {
-    font-size: clamp(36px, 6vw, 64px);
-    font-weight: 800;
-    letter-spacing: 2px;
-    line-height: 1.15;
-    background: linear-gradient(135deg, #e8eaed 0%, #58a6ff 50%, #79c0ff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 200% 200%;
-    animation: gradientShift 6s ease-in-out infinite;
-  }
-  @keyframes gradientShift {
-    0%,100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-
-  /* ── 头像 ── */
-  .avatar {
-    font-size: 56px;
-    margin-bottom: 16px;
-    animation: fadeUp 0.7s cubic-bezier(0.22,0.61,0.36,1) both;
-  }
-
-  /* ── 标签 ── */
-  .tags {
-    margin-top: 28px;
-    display: flex; justify-content:center; flex-wrap:wrap; gap:10px;
-  }
-  .tag {
-    font-family: "SF Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
-    font-size: 13px;
-    color: var(--accent);
-    background: rgba(88,166,255,0.06);
-    border: 1px solid rgba(88,166,255,0.18);
-    padding: 7px 18px;
-    border-radius: 6px;
-    cursor: default;
-    transition: all 0.25s ease;
-  }
-  .tag:hover {
-    background: rgba(88,166,255,0.14);
-    border-color: rgba(88,166,255,0.4);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px var(--glow);
-  }
-
-  /* ── 视频区 ── */
-  .section {
-    margin: 48px 0;
-  }
-  .section-label {
-    display: flex; align-items:center; gap:14px;
-    margin-bottom: 24px;
-  }
-  .section-label span {
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    color: var(--accent);
-    white-space: nowrap;
-  }
-  .section-label::after {
-    content:''; flex:1; height:1px;
-    background: linear-gradient(90deg, rgba(88,166,255,0.25), transparent);
-  }
-  .video-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-  .video-card {
-    position: relative;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.03) inset;
-    transition: box-shadow 0.4s ease;
-  }
-  .video-card:hover {
-    box-shadow: 0 12px 56px rgba(0,0,0,0.5), 0 0 40px var(--glow), 0 0 0 1px rgba(255,255,255,0.04) inset;
-  }
-  .video-wrap {
-    position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
-  }
-  .video-wrap iframe {
-    position: absolute; top:0; left:0;
-    width: 100%; height: 100%;
-    border: none;
-  }
-
-  /* ── 作品集 ── */
-  .project-card {
-    position: relative;
-    padding: 32px;
-    background:
-      radial-gradient(circle at 100% 0%, rgba(88,166,255,0.14), transparent 38%),
-      var(--surface);
-    border: 1px solid rgba(88,166,255,0.18);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.32);
-  }
-  .project-card::before {
-    content:'';
-    position:absolute; top:0; left:0;
-    width:100%; height:2px;
-    background:linear-gradient(90deg, var(--accent), var(--accent2), transparent 78%);
-  }
-  .project-meta {
-    display:flex; align-items:center; gap:12px;
-    margin-bottom:12px;
-    font-family:"SF Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
-    font-size:12px;
-    letter-spacing:1.5px;
-    color:var(--accent2);
-  }
-  .project-badge {
-    padding:4px 10px;
-    border:1px solid rgba(88,166,255,0.3);
-    border-radius:999px;
-    background:rgba(88,166,255,0.08);
-  }
-  .project-card h2 {
-    color:var(--heading);
-    font-size:clamp(26px, 4vw, 36px);
-    line-height:1.25;
-    margin-bottom:12px;
-  }
-  .project-card p {
-    max-width:650px;
-    color:var(--text);
-  }
-  .project-card .actions {
-    justify-content:flex-start;
-    margin-top:24px;
-  }
-
-  .actions {
-    text-align: center;
-    margin-top: 48px;
-    display: flex; justify-content:center; flex-wrap:wrap; gap:16px;
-  }
-  .btn {
-    display: inline-flex; align-items:center; gap:8px;
-    font-family: "SF Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
-    font-size: 14px;
-    color: var(--accent);
-    background: transparent;
-    border: 1px solid rgba(88,166,255,0.25);
-    padding: 12px 28px;
-    border-radius: 8px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn::before {
-    content:''; position:absolute; top:50%; left:50%;
-    width:0; height:0; background:rgba(88,166,255,0.1);
-    border-radius:50%; transform:translate(-50%,-50%);
-    transition: width 0.5s ease, height 0.5s ease;
-  }
-  .btn:hover::before { width:400px; height:400px; }
-  .btn:hover {
-    color: #fff;
-    border-color: var(--accent);
-    box-shadow: 0 0 24px var(--glow), inset 0 0 24px rgba(88,166,255,0.06);
-    transform: translateY(-2px);
-  }
-  .btn:hover .arrow { transform: translateX(4px); }
-  .arrow {
-    display: inline-block;
-    transition: transform 0.3s ease;
-  }
-
-  /* ── 淡入动画 ── */
-  @keyframes fadeUp {
-    from { opacity:0; transform:translateY(24px); }
-    to { opacity:1; transform:translateY(0); }
-  }
-  .reveal { animation: fadeUp 0.7s cubic-bezier(0.22,0.61,0.36,1) both; }
-  .reveal:nth-child(1) { animation-delay: 0.05s; }
-  .reveal:nth-child(2) { animation-delay: 0.15s; }
-  .reveal:nth-child(3) { animation-delay: 0.25s; }
-  .reveal:nth-child(4) { animation-delay: 0.35s; }
-  .reveal:nth-child(5) { animation-delay: 0.45s; }
-  .reveal:nth-child(6) { animation-delay: 0.55s; }
-
-  /* ── 页脚 ── */
-  .footer {
-    text-align: center;
-    padding: 60px 0 0;
-    color: rgba(255,255,255,0.2);
-    font-size: 13px;
-    letter-spacing: 1px;
-  }
-
-  /* ── 社交链接 ── */
-  .social {
-    display: flex; justify-content:center; gap:20px;
-    margin-top: 48px;
-  }
-  .social a {
-    width: 44px; height: 44px;
-    display: flex; align-items:center; justify-content:center;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 12px;
-    color: rgba(255,255,255,0.35);
-    text-decoration: none;
-    font-size: 20px;
-    transition: all 0.3s ease;
-  }
-  .social a:hover {
-    color: var(--accent);
-    border-color: var(--accent);
-    box-shadow: 0 0 20px var(--glow);
-    transform: translateY(-3px);
-  }
-
-  /* ── 回到顶部 ── */
-  .top-btn {
-    position: fixed; bottom: 32px; right: 32px; z-index: 99;
-    width: 44px; height: 44px;
-    display: flex; align-items:center; justify-content:center;
-    background: rgba(17,20,24,0.85);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    color: rgba(255,255,255,0.5);
-    font-size: 20px;
-    cursor: pointer;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(8px);
-  }
-  .top-btn.visible {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .top-btn:hover {
-    color: var(--accent);
-    border-color: var(--accent);
-    box-shadow: 0 0 20px var(--glow);
-  }
-
-  /* ── 响应式 ── */
-  @media (max-width: 640px) {
-    .page { padding: 60px 20px 60px; }
-    .hero { margin-bottom: 40px; }
-    .tag { font-size: 12px; padding: 5px 14px; }
-    .btn { padding: 10px 22px; font-size: 13px; }
-    .project-card { padding: 24px; }
-    .video-grid { grid-template-columns: 1fr; }
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Huangty-xixi 的个人作品集：嵌入式开发、ROBOCON 2026 主赛 R2 项目与实车调试记录。">
+  <meta name="theme-color" content="#0a0c10">
+  <title>26年RC · Huangty-xixi 作品集</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⚙%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="site.js" defer></script>
 </head>
 <body>
-
-<div class="bg-grid"></div>
-
-<div class="page">
-
-  <div class="hero reveal">
-    <div class="avatar">🤖</div>
-    <h1>26年RC</h1>
-    <div class="tags">
-      <span class="tag reveal">STM32H723</span>
-      <span class="tag reveal">FreeRTOS</span>
-      <span class="tag reveal">CAN · FDCAN</span>
-      <span class="tag reveal">多级 PID</span>
-      <span class="tag reveal">C · 裸机</span>
-      <span class="tag reveal">Git</span>
-    </div>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="page">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Huangty-xixi 首页"><span class="brand-mark" aria-hidden="true">H.</span> Huangty-xixi</a>
+      <nav aria-label="主要导航"><a href="#about">关于我</a><a href="#projects">作品集</a><a href="#videos">实车演示</a><a href="#contact">联系</a></nav>
+    </header>
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="avatar" aria-hidden="true">🤖</div>
+        <p class="eyebrow">EMBEDDED SYSTEMS / ROBOTICS</p>
+        <h1 id="hero-title">26年RC</h1>
+        <p class="hero-subtitle">从一行代码，到机器人真正动起来。</p>
+        <p class="hero-note">Huangty-xixi 的个人作品集与实车记录</p>
+        <div class="tags" aria-label="技术关键词"><span class="tag">STM32H723</span><span class="tag">FreeRTOS</span><span class="tag">CAN · FDCAN</span><span class="tag">多级 PID</span><span class="tag">C · 裸机</span><span class="tag">Git</span></div>
+        <div class="actions hero-actions"><a class="btn btn-primary" href="#projects">浏览作品 <span aria-hidden="true">↓</span></a><a class="text-link" href="#videos">看实车演示 <span aria-hidden="true">↗</span></a></div>
+      </section>
+      <section class="section" id="about" aria-labelledby="about-title">
+        <div class="section-label"><h2 id="about-title">个人简介</h2><span>01 / ABOUT</span></div>
+        <div class="about-layout">
+          <div class="about-copy"><h3>你好，我是<br><span class="accent">Huangty-xixi。</span></h3><p>关注嵌入式开发与机器人运动控制。这里记录我的 ROBOCON 2026 主赛 R2 项目，以及从代码到实车的调试过程。</p><p>你可以从项目详情了解程序结构，也可以直接查看仓库和实车演示。</p><a class="text-link" href="https://github.com/Huangty-xixi" target="_blank" rel="noopener noreferrer">我的 GitHub <span aria-hidden="true">↗</span></a></div>
+          <dl class="skill-list"><div><dt>嵌入式开发</dt><dd>STM32H723 · C · FreeRTOS</dd></div><div><dt>通信与控制</dt><dd>CAN / FDCAN · PID · 电机控制</dd></div><div><dt>项目实践</dt><dd>ROBOCON 2026 · 实车调试 · Git</dd></div></dl>
+        </div>
+      </section>
+      <section class="section" id="projects" aria-labelledby="projects-title">
+        <div class="section-label"><h2 id="projects-title">作品集</h2><span>02 / PROJECTS</span></div>
+        <article class="project-card">
+          <div class="project-meta"><span class="project-badge">主赛项目</span><span>ROBOCON 2026</span></div>
+          <div class="project-heading"><h3>主赛 R2</h3><span class="project-number" aria-hidden="true">R2</span></div>
+          <p>基于 STM32H723 与 FreeRTOS 的机器人控制项目。通信、运动与传感器任务分别组织，覆盖底盘控制、机构动作和分区流程。</p>
+          <div class="project-facts"><span>STM32H723 主控</span><span>FreeRTOS 任务调度</span><span>一区 / 二区 / 三区流程</span></div>
+          <div class="actions"><a href="r2.html" class="btn btn-primary">查看项目详情 <span aria-hidden="true">→</span></a><a href="https://github.com/Huangty-xixi/R2" target="_blank" rel="noopener noreferrer" class="btn">GitHub 仓库 <span aria-hidden="true">↗</span></a></div>
+        </article>
+      </section>
+      <section class="section" id="videos" aria-labelledby="videos-title">
+        <div class="section-label"><h2 id="videos-title">实车演示</h2><span>03 / IN MOTION</span></div>
+        <p class="section-intro">分区调试、技能赛与一年的 RC 记录。每段演示都可以直接前往 B 站观看。</p>
+        <div class="filters" aria-label="按演示类型筛选" hidden>
+          <button type="button" class="filter active" data-filter="all" aria-pressed="true">全部 <span>7</span></button>
+          <button type="button" class="filter" data-filter="zone" aria-pressed="false">分区演示 <span>4</span></button>
+          <button type="button" class="filter" data-filter="skill" aria-pressed="false">技能赛 <span>2</span></button>
+          <button type="button" class="filter" data-filter="record" aria-pressed="false">项目记录 <span>1</span></button>
+        </div>
+        <p class="sr-only" id="video-status" role="status" aria-live="polite" aria-atomic="true"></p>
+        <div class="video-grid">
+          <article class="video-card" data-category="record">
+            <div class="video-wrap"><iframe title="纪念一年的RC 实车视频" src="https://player.bilibili.com/player.html?bvid=BV14LKB6MEDC&amp;page=1&amp;autoplay=0" allowfullscreen loading="lazy"></iframe></div>
+            <div class="video-info"><span class="video-category">项目记录</span><h3>纪念一年的 RC</h3><p>一年的 RC 项目影像记录。</p><a class="text-link" href="https://www.bilibili.com/video/BV14LKB6MEDC/" target="_blank" rel="noopener noreferrer" aria-label="在 B 站观看纪念一年的 RC">B 站观看 <span aria-hidden="true">↗</span></a></div>
+          </article>
+          <article class="video-card" data-category="zone">
+            <div class="video-wrap"><iframe title="二区调车视频" src="https://player.bilibili.com/player.html?bvid=BV1ZGKq6nEr8&amp;page=1&amp;autoplay=0" allowfullscreen loading="lazy"></iframe></div>
+            <div class="video-info"><span class="video-category">分区演示 · 二区</span><h3>二区调车视频</h3><p>二区实车调试记录，可与 v1 版本对照查看。</p><a class="text-link" href="https://www.bilibili.com/video/BV1ZGKq6nEr8/" target="_blank" rel="noopener noreferrer" aria-label="在 B 站观看二区调车视频">B 站观看 <span aria-hidden="true">↗</span></a></div>
+          </article>
+          <article class="video-card" data-category="zone">
+            <div class="video-wrap"><iframe title="二区调车视频 v1" src="https://player.bilibili.com/player.html?bvid=BV17GKq6HEqy&amp;page=1&amp;autoplay=0" allowfullscreen loading="lazy"></iframe></div>
+            <div class="video-info"><span class="video-category">分区演示 · 二区</span><h3>二区调车视频 v1</h3><p>二区调车的 v1 版本，保留一次实车调试过程。</p><a class="text-link" href="https://www.bilibili.com/video/BV17GKq6HEqy/" target="_blank" rel="noopener noreferrer" aria-label="在 B 站观看二区调车视频 v1">B 站观看 <span aria-hidden="true">↗</span></a></div>
+          </article>
+          <article class="video-card" data-category="zone">
+            <div class="video-wrap"><iframe title="三区放 KFS 视频" src="https://player.bilibili.com/player.html?bvid=BV1ubKq66E2u&amp;page=1&amp;autoplay=0" allowfullscreen loading="lazy"></iframe></div>
+            <div class="video-info"><span class="video-category">分区演示 · 三区</span><h3>三区放 KFS</h3><p>三区 KFS 放置动作的实车演示。</p><a class="text-link" href="https://www.bilibili.com/video/BV1ubKq66E2u/" target="_blank" rel="noopener noreferrer" aria-label="在 B 站观看三区放 KFS">B 站观看 <span aria-hidden="true">↗</span></a></div>
+          </article>
+          <article class="video-card" data-category="skill">
+            <div class="video-wrap"><iframe title="三区技能赛视频" src="https://player.bilibili.com/player.html?bvid=BV1gbKq66E71&amp;page=1&amp;autoplay=0" allowfullscreen loading="lazy"></iframe></div>
+            <div class="video-info"><span class="video-category">技能赛 · 三区</span><h3>三区技能赛</h3><p>三区技能赛的实车运行记录。</p><a class="text-link" href="https://www.bilibili.com/video/BV1gbKq66E71/" target="_blank" rel="noopener noreferrer" aria-label="在 B 站观看三区技能赛">B 站观看 <span aria-hidden="true">↗</span></a></div>
+          </article>
+          <article class="video-card" data-category="zone">
+            <div class="video-wrap"><iframe title="一区实车演示" src="https://player.bilibili.com/player.html?bvid=BV1SbKq6zEeU&amp;page=1&amp;autoplay=0" allowfullscreen loading="lazy"></iframe></div>
+            <div class="video-info"><span class="video-category">分区演示 · 一区</span><h3>一区</h3><p>一区实车运行片段，对应项目的一区流程。</p><a class="text-link" href="https://www.bilibili.com/video/BV1SbKq6zEeU/" target="_blank" rel="noopener noreferrer" aria-label="在 B 站观看一区实车演示">B 站观看 <span aria-hidden="true">↗</span></a></div>
+          </article>
+          <article class="video-card" data-category="skill">
+            <div class="video-wrap"><iframe title="一二区技能赛视频" src="https://player.bilibili.com/player.html?bvid=BV1SbKq6zE6S&amp;page=1&amp;autoplay=0" allowfullscreen loading="lazy"></iframe></div>
+            <div class="video-info"><span class="video-category">技能赛 · 一区 / 二区</span><h3>一二区技能赛</h3><p>一区与二区技能赛的实车演示记录。</p><a class="text-link" href="https://www.bilibili.com/video/BV1SbKq6zE6S/" target="_blank" rel="noopener noreferrer" aria-label="在 B 站观看一二区技能赛">B 站观看 <span aria-hidden="true">↗</span></a></div>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer class="section contact" id="contact" aria-labelledby="contact-title">
+      <div class="section-label"><h2 id="contact-title">联系我</h2><span>04 / CONTACT</span></div>
+      <p>欢迎交流嵌入式开发与机器人控制。</p>
+      <div class="contact-links"><a href="mailto:1815565869@qq.com">1815565869@qq.com <span aria-hidden="true">↗</span></a><a href="https://github.com/Huangty-xixi" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a href="https://space.bilibili.com/523482407" target="_blank" rel="noopener noreferrer">Bilibili <span aria-hidden="true">↗</span></a></div>
+      <p class="footer-note">Huangty-xixi · Built with dedication</p>
+    </footer>
   </div>
-
-  <div class="section reveal">
-    <div class="section-label"><span>作品集</span></div>
-    <article class="project-card">
-      <div class="project-meta">
-        <span class="project-badge">主赛项目</span>
-        <span>ROBOCON 2026</span>
-      </div>
-      <h2>主赛 R2</h2>
-      <p>围绕 STM32H723、FreeRTOS、CAN / FDCAN 与多级 PID 开发的主赛机器人项目。代码与开发记录已整理在 GitHub 仓库中。</p>
-      <div class="actions">
-        <a href="https://github.com/Huangty-xixi/R2" target="_blank" rel="noopener noreferrer" class="btn" aria-label="在 GitHub 查看主赛 R2 代码仓库">
-          查看 GitHub 仓库 <span class="arrow" aria-hidden="true">→</span>
-        </a>
-      </div>
-    </article>
-  </div>
-
-  <div class="section reveal">
-    <div class="section-label"><span>实车演示</span></div>
-    <div class="video-grid">
-      <div class="video-card">
-        <div class="video-wrap">
-          <iframe src="https://player.bilibili.com/player.html?bvid=BV14LKB6MEDC&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
-        </div>
-      </div>
-      <div class="video-card">
-        <div class="video-wrap">
-          <iframe src="https://player.bilibili.com/player.html?bvid=BV1ZGKq6nEr8&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
-        </div>
-      </div>
-      <div class="video-card">
-        <div class="video-wrap">
-          <iframe src="https://player.bilibili.com/player.html?bvid=BV17GKq6HEqy&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
-        </div>
-      </div>
-      <div class="video-card">
-        <div class="video-wrap">
-          <iframe src="https://player.bilibili.com/player.html?bvid=BV1ubKq66E2u&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
-        </div>
-      </div>
-      <div class="video-card">
-        <div class="video-wrap">
-          <iframe src="https://player.bilibili.com/player.html?bvid=BV1gbKq66E71&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
-        </div>
-      </div>
-      <div class="video-card">
-        <div class="video-wrap">
-          <iframe src="https://player.bilibili.com/player.html?bvid=BV1SbKq6zEeU&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
-        </div>
-      </div>
-      <div class="video-card">
-        <div class="video-wrap">
-          <iframe src="https://player.bilibili.com/player.html?bvid=BV1SbKq6zE6S&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy"></iframe>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="social reveal">
-    <a href="https://github.com/Huangty-xixi" target="_blank" title="GitHub">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-    </a>
-    <a href="https://space.bilibili.com/523482407" target="_blank" title="Bilibili">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 01-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 01.16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/></svg>
-    </a>
-    <a href="mailto:1815565869@qq.com" title="Email">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
-    </a>
-  </div>
-
-  <div class="footer reveal">
-    Built with dedication
-  </div>
-
-</div>
-
-<button class="top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
-
-<script>
-(function(){
-  var btn = document.querySelector('.top-btn');
-  window.addEventListener('scroll',function(){
-    btn.classList.toggle('visible', window.scrollY > 400);
-  });
-})();
-</script>
+  <a class="top-btn" href="#main" aria-label="回到顶部" hidden>↑</a>
+</body>
 </html>
